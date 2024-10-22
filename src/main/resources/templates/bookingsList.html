@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Rooms List</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container mt-5">
+    <h2>BOOKINGS LIST</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>BOOKINGS NUMBER</th>
+            <th>USER ACCOUNT</th>
+            <th>USER FIRST NAME</th>
+            <th>USER LAST NAME</th>
+            <th>ROOMS</th>
+            <th>MEAL PLAN</th>
+            <th>ADDITIONAL SERVICES</th>
+            <th>CHECK IN DATE</th>
+            <th>CHECK OUT DATE</th>
+            <th>BOOKING STATUS</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="booking : ${bookings}">
+            <td th:text="${booking.id}"></td>
+            <td th:text="${booking.userDto.username}"></td>
+            <td th:text="${booking.userDto.firstName}"></td>
+            <td th:text="${booking.userDto.lastName}"></td>
+            <td>
+                <span th:if="${#lists.isEmpty(booking.roomDtos)}"></span>
+                <span th:if="${!#lists.isEmpty(booking.roomDtos)}">
+                <div th:each="room : ${booking.roomDtos}">
+                    <span th:text="${room.number}"></span>
+                </div>
+            </span>
+            </td>
+            <td th:text="${booking.nutritionDto.name}"></td>
+            <td>
+                <span th:if="${#lists.isEmpty(booking.additionalServiceDtos)}"></span>
+                <span th:if="${!#lists.isEmpty(booking.additionalServiceDtos)}">
+                <div th:each="service : ${booking.additionalServiceDtos}">
+                    <span th:text="${service.name}"></span>
+                </div>
+            </span>
+            </td>
+            <td th:text="${booking.checkInDate}"></td>
+            <td th:text="${booking.checkOutDate}"></td>
+            <td th:text="${booking.bookingStatuses}"></td>
+            <td>
+                <a th:href="@{/bookings/{id}(id=${booking.id})}" class="btn btn-info btn-sm">VIEW</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <a href="/" class="btn btn-secondary">BACK TO HOMEPAGE</a>
+</div>
+</body>
+</html>

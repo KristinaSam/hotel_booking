@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Type Details</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center">ROOM TYPE DETAILS</h1>
+    <div class="card mb-3">
+        <div class="card-header">
+            <h5 th:text="${roomType.name}"></h5>
+        </div>
+        <div class="card-body">
+            <h6 class="card-title">ID: <span th:text="${roomType.id}"></span></h6>
+            <p class="card-text">
+                <strong>Capacity:</strong> <span th:text="${roomType.capacity}"></span><br>
+                <strong>Description:</strong> <span th:text="${roomType.description}"></span>
+            </p>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <a th:href="@{/roomTypes/{id}/edit(id=${roomType.id})}" class="btn btn-warning">EDIT</a>
+        <a th:href="@{/roomTypes}" class="btn btn-secondary">BACK TO ROOM TYPE LIST</a>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Room Types List</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center">ROOM TYPES</h1>
+    <a href="/roomTypes/createRoomTypeForm" class="btn btn-primary mb-3">CREATE NEW ROOM TYPE</a>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ROOM TYPE</th>
+            <th>DESCRIPTION</th>
+            <th>CAPACITY</th>
+            <th>ACTIONS</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="roomType : ${roomTypes}">
+            <td th:text="${roomType.name}"></td>
+            <td th:text="${roomType.description}"></td>
+            <td th:text="${roomType.capacity}"></td>
+            <td>
+                <div class="btn-group" role="group" aria-label="Actions">
+                    <a th:href="@{/roomTypes/{id}/edit(id=${roomType.id})}" class="btn btn-warning btn-sm">EDIT</a>
+                    <a th:href="@{/roomTypes/{id}/delete(id=${roomType.id})}" class="btn btn-danger btn-sm">DELETE</a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a href="/" class="btn btn-secondary">Back to Home</a>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

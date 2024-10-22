@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<h1>Login</h1>
+<form th:action="@{/login}" method="post">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required />
+    <br/>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required />
+    <br/>
+    <button type="submit">Login</button>
+</form>
+</body>
+</html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Homepage</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="container text-center hero">
+    <h1 class="display-4">Welcome to the Hotel!</h1>
+    <p class="lead">Enjoy a comfortable stay with us.</p>
+    <div class="mt-4">
+        <a th:href="@{/login}" class="btn btn-custom btn-lg">Sign in</a>
+        <a th:href="@{/register}" class="btn btn-custom btn-lg">Sign up</a>
+        <a th:href="@{/dashboard}" class="btn btn-custom btn-lg">Go to your personal account</a>
+        <a th:href="@{/rooms}" class="btn btn-custom btn-lg">Rooms</a>
+        <a th:href="@{/nutrition}" class="btn btn-custom btn-lg">Nutrition</a>
+        <a th:href="@{/additionalServices}" class="btn btn-custom btn-lg">AdditionalService</a>
+        <a th:href="@{/bookings/bookingForm}" class="btn btn-custom btn-lg">Book</a>
+    </div>
+</div>
+</body>
+</html>
+

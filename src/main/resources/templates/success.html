@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Success</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    </head>
+    <body>
+    <header>
+        <h1 th:text="${message}"></h1>
+        <nav>
+            <ul>
+                <li><a th:href="@{/dashboard}">Personal account</a></li>
+                <li><a th:href="@{/logout}">Exit</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Hello, <span th:text="${user.firstName}"></span>!</h2>
+            <p>You have successfully registered. Now you can use all the features of our application.</p>
+        </section>
+    </main>
+    <footer>
+        tel +375295483647
+        email hotel@gmail.com
+        <br>© HOTEL hotel@gmail.com <%= new Date()%>
+    </footer>
+    </body>
+    </html>

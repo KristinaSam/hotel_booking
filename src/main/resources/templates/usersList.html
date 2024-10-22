@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Customers List</title>
+</head>
+<body>
+
+<!-- Перебор списка клиентов -->
+<div th:each="customer : ${customers}">
+    <a th:href="@{/customer(id=${customer.id})}">
+        - <span th:text="${customer.username}"></span>
+        - <span th:text="${customer.firstName}"></span>
+        - <span th:text="${customer.lastName}"></span>
+        - <span th:text="${customer.email}"></span>
+        - <span th:text="${customer.phoneNumber}"></span>
+    </a>
+    <br/>
+</div>
+
+<br>
+<a th:href="@{/showClientForm}">Create user</a>
+
+<br>
+<p>Copyright (c) 2024 hotel@gmail.com <span th:text="${#dates.format(new java.util.Date(), 'dd MMMM yyyy')}"></span></p>
+
+</body>
+</html>

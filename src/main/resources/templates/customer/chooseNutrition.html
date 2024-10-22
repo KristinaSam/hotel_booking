@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Выбор питания</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1>Выбор плана питания</h1>
+    <form th:action="@{/bookings/chooseNutrition}" method="post" th:object="${bookingDto}">
+        <input type="hidden" th:name="checkInDate" th:value="${bookingDto.checkInDate}"/>
+        <input type="hidden" th:name="checkOutDate" th:value="${bookingDto.checkOutDate}"/>
+        <input type="hidden" th:name="adultsCount" th:value="${bookingDto.adultsCount}"/>
+        <input type="hidden" th:name="childrenCount" th:value="${bookingDto.childrenCount}"/>
+        <input type="hidden" th:each="room : ${bookingDto.roomDtos}" th:name="selectedRoomIds" th:value="${room.id}"/>
+        <h1>Выбранные номера</h1>
+        <ul class="list-group">
+            <li class="list-group-item" th:each="room : ${bookingDto.roomDtos}">
+                Номер: <span th:text="${room.number}"></span>
+                <input type="hidden" th:name="'selectedRoomIds'" th:value="${room.id}"/>
+            </li>
+        </ul>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Цена</th>
+                <th>Выбрать</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="nutrition : ${nutritionDtoList}">
+                <td th:text="${nutrition.name}"></td>
+                <td th:text="${nutrition.description}"></td>
+                <td th:text="${nutrition.price} + ' €'"></td>
+                <td>
+                    <label>
+                        <input type="radio" th:name="selectedNutritionId" th:value="${nutrition.id}" required/>
+                    </label>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-success">Выбрать питание</button>
+    </form>
+</div>
+</body>
+</html>

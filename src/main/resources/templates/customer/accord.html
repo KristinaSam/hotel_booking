@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма бронирования</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="text-center">Форма бронирования</h1>
+    <form th:action="@{/bookings/processBooking}" th:object="${bookingDto}" method="post">
+        <div class="accordion" id="bookingAccordion">
+            <!-- ввод даты и людей для бронирования -->
+            <div class="card">
+                <div class="card-header" id="headingDetails">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseDetails" aria-expanded="true" aria-controls="collapseDetails">
+                            Ввод данных для бронирования
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseDetails" class="collapse show" aria-labelledby="headingDetails" data-parent="#bookingAccordion">
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="checkInDate">Дата заезда:</label>
+                            <input type="date" id="checkInDate" th:field="*{checkInDate}" required class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="checkOutDate">Дата выезда:</label>
+                            <input type="date" id="checkOutDate" th:field="*{checkOutDate}" required class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="adultsCount">Количество взрослых:</label>
+                            <input type="number" id="adultsCount" th:field="*{adultsCount}" min="1" required class="form-control"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="childrenCount">Количество детей:</label>
+                            <input type="number" id="childrenCount" th:field="*{childrenCount}" min="0" class="form-control"/>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Найти доступные номера</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- отбор свободных комнат и выбор -->
+            <div class="card">
+                <div class="card-header" id="headingRooms">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseRooms" aria-expanded="false" aria-controls="collapseRooms">
+                            Доступные номера
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseRooms" class="collapse" aria-labelledby="headingRooms" data-parent="#bookingAccordion">
+                    <div class="card-body">
+                        <div th:if="${filteredRooms}">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Номер</th>
+                                    <th>Тип</th>
+                                    <th>Вместимость</th>
+                                    <th>Цена</th>
+                                    <th>Выбрать</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="room : ${filteredRooms}">
+                                    <td th:text="${room.number}"></td>
+                                    <td th:text="${room.roomTypeDto.name}"></td>
+                                    <td th:text="${room.roomTypeDto.capacity}"></td>
+                                    <td th:text="${room.price} + ' €'"></td>
+                                    <td>
+                                        <label>
+                                            <input type="checkbox" th:name="selectedRoomIds" th:value="${room.id}"/>
+                                        </label>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <button type="submit" class="btn btn-success">Выбрать номера</button>
+                        </div>
+                        <div th:if="${error}" class="alert alert-danger" role="alert">
+                            <p th:text="${error}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- выбор типа питания -->
+            <div class="card">
+                <div class="card-header" id="headingNutrition">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseNutrition" aria-expanded="false" aria-controls="collapseNutrition">
+                            Выбор питания
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseNutrition" class="collapse" aria-labelledby="headingNutrition" data-parent="#bookingAccordion">
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Название</th>
+                                <th>Описание</th>
+                                <th>Цена</th>
+                                <th>Выбрать</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="nutrition : ${nutritionDtoList}">
+                                <td th:text="${nutrition.name}"></td>
+                                <td th:text="${nutrition.description}"></td>
+                                <td th:text="${nutrition.price} + ' €'"></td>
+                                <td>
+                                    <label>
+                                        <input type="radio" th:name="selectedNutritionId" th:value="${nutrition.id}" required/>
+                                    </label>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+<!--                        <div class="form-group">-->
+<!--                            <label for="nutritionSelect">Выберите питание:</label>-->
+<!--                            <select id="nutritionSelect" th:field="*{nutritionDto}" class="form-control">-->
+<!--                                <option th:each="nutrition : ${nutritionDtoList}" th:value="${nutrition.id}" th:text="${nutrition.name}"></option>-->
+<!--                            </select>-->
+<!--                        </div>-->
+                    </div>
+                </div>
+            </div>
+
+            <!-- выбор допуслуг -->
+            <div class="card">
+                <div class="card-header" id="headingServices">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseServices" aria-expanded="false" aria-controls="collapseServices">
+                            Дополнительные услуги
+                        </button>
+                    </h2>
+                </div>
+                <div id="collapseServices" class="collapse" aria-labelledby="headingServices" data-parent="#bookingAccordion">
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Дополнительная услуга</th>
+                                <th>Описание</th>
+                                <th>Цена</th>
+                                <th>Выбрать</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="additionalService : ${additionalServiceList}">
+                                <td th:text="${additionalService.name}"></td>
+                                <td th:text="${additionalService.description}"></td>
+                                <td th:text="${additionalService.price} + ' €'"></td>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" th:name="selectedAdditionalServiceIds" th:value="${additionalService.id}"/>
+                                    </label>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+<!--                        <div th:if="${additionalServiceList}">-->
+<!--                            <div th:each="service : ${additionalServiceList}">-->
+<!--                                <div class="form-check">-->
+<!--                                    <input type="checkbox" th:name="selectedAdditionalServiceIds" th:value="${service.id}" class="form-check-input" id="service_${service.id}"/>-->
+<!--                                    <label class="form-check-label" th:for="'service_' + ${service.id}" th:text="${service.name}"></label>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary">Продолжить</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

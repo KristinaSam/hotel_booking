@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete meal plan</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center">DELETE MEAL PLAN</h1>
+    <div class="alert alert-warning">
+        <strong>Warning!</strong> Are you sure you want to delete the following nutrition?
+    </div>
+    <div>
+        <p><strong>MEAL PLAN:</strong> <span th:text="${nutrition.name}"></span></p>
+        <p><strong>DESCRIPTION:</strong> <span th:text="${nutrition.description}"></span></p>
+        <p><strong>PRICE:</strong> <span th:text="${nutrition.price}"></span></p>
+    </div>
+    <form th:action="@{/nutrition/{id}/delete(id=${nutrition.id})}" method="post">
+        <button type="submit" class="btn btn-danger">DELETE</button>
+        <a href="/nutrition" class="btn btn-secondary">CANCEL</a>
+    </form>
+</div>
+</body>
+</html>

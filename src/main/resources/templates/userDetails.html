@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Customer Details</title>
+</head>
+<body>
+<p th:text="${customer.id} + ' - ' + ${customer.username} + ' - ' + ${customer.firstName} + ' - ' + ${customer.lastName} + ' - ' + ${customer.email} + ' - ' + ${customer.phoneNumber}"></p>
+<br>
+<p>Copyright (c) 2024 hotel@gmail.com <span th:text="${#dates.format(new java.util.Date(), 'dd MMMM yyyy')}"></span></p>
+
+</body>
+</html>

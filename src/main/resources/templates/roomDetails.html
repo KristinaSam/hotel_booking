@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Room Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>ROOM DETAILS</h2>
+    <div>
+        <p><strong>ROOM NUMBER:</strong> <span th:text="${room.number}"></span></p>
+        <p><strong>ROOM TYPE:</strong> <span th:text="${room.roomTypeDto.name}"></span></p>
+        <p><strong>DESCRIPTION:</strong> <span th:text="${room.roomTypeDto.description}"></span></p>
+        <p><strong>NUMBER OF PEOPLE STAYING IN THE ROOM:</strong> <span th:text="${room.roomTypeDto.capacity}"></span></p>
+        <p><strong>PRICE:</strong> <span th:text="${room.price} + ' €'"></span></p>
+    </div>
+    <a href="/rooms" class="btn btn-secondary">BACK TO ROOMS LIST</a>
+    <a th:href="@{/rooms/{id}/edit(id=${room.id})}" class="btn btn-warning">EDIT ROOM</a>
+    <a th:href="@{/rooms/{id}/delete(id=${room.id})}" class="btn btn-danger">DELETE ROOM</a>
+</div>
+</body>
+</html>

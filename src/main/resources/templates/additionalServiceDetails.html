@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Additional Service Details</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center">ADDITIONAL SERVICE DETAILS</h1>
+    <div class="card mb-3">
+        <div class="card-header">
+            <h5 th:text="${additionalService.name}"></h5>
+        </div>
+        <div class="card-body">
+            <p class="card-text">
+                <strong>DESCRIPTION:</strong> <span th:text="${additionalService.description}"></span><br>
+                <strong>PRICE:</strong> <span th:text="${additionalService.price}"></span>
+            </p>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <a th:href="@{/additionalServices/{id}/edit(id=${additionalService.id})}" class="btn btn-warning">EDIT</a>
+        <a th:href="@{/additionalServices}" class="btn btn-secondary">BACK TO ADDITIONAL SERVICES</a>
+    </div>
+</div>
+</body>
+</html>
