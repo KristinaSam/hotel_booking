@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Delete meal plan form</title>
+    <link rel="stylesheet" th:href="@{../../css/styles.css}" type="text/css">
+    <link rel="icon" type="image/x-icon" href="./../img/logo.png">
+</head>
+<div th:insert="common/header :: header"></div>
+<div id="main">
+    <div class="main-space-hr"></div>
+    <div class="main-header">
+        <h1>DELETE MEAL PLAN</h1>
+        <span>
+        </span>
+    </div>
+    <div class="main-space-hr">
+        <hr>
+    </div>
+    <div class="main-content">
+        <div class="main-content-header">
+            <div class="form-style">
+                <div class="div-form">
+                    <h1 class="text-center">DELETE MEAL PLAN</h1>
+                    <div class="alert alert-warning">
+                        <strong>Warning!</strong> Are you sure you want to delete the following meal plan?
+                    </div>
+                    <div>
+                        <p><strong>MEAL PLAN:</strong> <span th:text="${nutrition.name}"></span></p>
+                        <p><strong>DESCRIPTION:</strong> <span th:text="${nutrition.description}"></span></p>
+                        <p><strong>PRICE:</strong> <span th:text="${nutrition.price} + ' €'"></span></p>
+                    </div>
+                    <form th:action="@{/nutrition/{id}/delete(id=${nutrition.id})}" method="post">
+                        <button type="submit" class="input-button">DELETE</button>
+                        <a href="/nutrition" class="input-button">CANCEL</a>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div th:insert="common/footer :: footer"></div>

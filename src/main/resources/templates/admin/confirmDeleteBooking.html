@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Delete reservation form</title>
+    <link rel="stylesheet" th:href="@{../../css/styles.css}" type="text/css">
+    <link rel="icon" type="image/x-icon" href="./../img/logo.png">
+</head>
+<div th:insert="common/header :: header"></div>
+<div id="main">
+    <div class="main-space-hr"></div>
+    <div class="main-header">
+    <h1>CONFIRM DELETE RESERVATION</h1>
+        <span>
+        </span>
+    </div>
+    <div class="main-space-hr">
+        <hr>
+    </div>
+    <div class="main-content">
+        <div class="main-content-header">
+            <div class="form-style">
+                <div class="div-form">
+    <div class="alert alert-warning">
+        <strong>WARNING!</strong> Are you sure you want to delete the following booking?
+    </div>
+    <div class="card mb-3">
+        <div class="card-header">
+            <h5 class="card-title">RESERVATION DETAILS</h5>
+        </div>
+        <div class="card-body">
+            <p class="card-text">
+                <strong>BOOKED ROOMS:</strong>
+                <span th:if="${!#lists.isEmpty(booking.roomDtos)}">
+                    <ul>
+                        <li th:each="room : ${booking.roomDtos}" th:text="${room.number}"></li>
+                    </ul>
+                </span><br>
+                <strong>CUSTOMER:</strong> <span th:text="${booking.userDto.firstName} + ' ' + ${booking.userDto.lastName}"></span><br>
+                <strong>MEAL PLAN:</strong> <span th:text="${booking.nutritionDto.name}"></span><br>
+                <strong>ADDITIONAL SERVICES:</strong>
+                <span th:if="${!#lists.isEmpty(booking.additionalServiceDtos)}">
+                    <ul>
+                        <li th:each="service : ${booking.additionalServiceDtos}" th:text="${service.name}"></li>
+                    </ul>
+                </span><br>
+                <strong>CHECK IN DATE:</strong> <span th:text="${booking.checkInDate}"></span><br>
+                <strong>CHECK OUT DATE:</strong> <span th:text="${booking.checkOutDate}"></span><br>
+                <strong>NUMBER OF ADULTS:</strong> <span th:text="${booking.adultsCount}"></span><br>
+                <strong>NUMBER OF CHILDREN:</strong> <span th:text="${booking.childrenCount}"></span><br>
+                <strong>STATUS OF RESERVATION:</strong> <span th:text="${booking.bookingStatus}"></span><br>
+            </p>
+        </div>
+    </div>
+    <form th:action="@{/bookings/{id}/delete(id=${booking.id})}" method="post">
+        <button type="submit" class="input-button">DELETE</button>
+        <a href="/bookings" class="input-button">CANCEL</a>
+    </form>
+</div>
+</div>

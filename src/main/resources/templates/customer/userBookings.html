@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>My reservation</title>
+    <link rel="stylesheet" th:href="@{../../css/styles.css}" type="text/css">
+    <link rel="icon" type="image/x-icon" href="./../img/logo.png">
+</head>
+<div th:insert="common/header :: header"></div>
+<div id="main">
+    <div class="main-space-hr"></div>
+    <div class="main-header">
+        <h1>MY RESERVATION</h1>
+        <span>
+        </span>
+    </div>
+    <div class="main-space-hr">
+        <hr>
+    </div>
+    <div class="main-content">
+        <div class="main-content-header">
+                <div th:if="${userBookings != null}">
+                    <p th:if="${userBookings.isEmpty()}">У вас нет бронирований.</p>
+                    <table class="table" th:if="${!userBookings.isEmpty()}">
+                        <thead>
+                        <tr>
+                            <th>BOOKINGS NUMBER</th>
+                            <th>ROOMS</th>
+                            <th>MEAL PLAN</th>
+                            <th>ADDITIONAL SERVICES</th>
+                            <th>CHECK IN DATE</th>
+                            <th>CHECK OUT DATE</th>
+                            <th>BOOKING STATUS</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="booking : ${userBookings}">
+                            <td th:text="${booking.id}"></td>
+                            <td>
+                                <ul>
+                                    <li th:each="room : ${booking.roomDtos}">
+                                        <span th:text="${room.id}"></span> - <span
+                                            th:text="${room.roomTypeDto.name}"></span>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td th:text="${booking.nutritionDto.name}"></td>
+                            <td>
+                                <ul>
+                                    <li th:each="service : ${booking.additionalServiceDtos}">
+                                        <span th:text="${service.name}"></span>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td th:text="${booking.checkInDate}"></td>
+                            <td th:text="${booking.checkOutDate}"></td>
+                            <td th:text="${booking.bookingStatus}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <a href="/home" class="input-button">BACK TO HOMEPAGE</a>
+                </div>
+        </div>
+    </div>
+</div>
+<div th:insert="common/footer :: footer"></div>
+
+

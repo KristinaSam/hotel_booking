@@ -1,6 +1,6 @@
 package com.academy.hotel_booking.service.impl;
 
-import com.academy.hotel_booking.dto.additionalServiceDto.AdditionalServiceDto;
+import com.academy.hotel_booking.dto.AdditionalServiceDto;
 import com.academy.hotel_booking.model.entity.AdditionalService;
 import com.academy.hotel_booking.model.repository.AdditionalServiceRepository;
 import com.academy.hotel_booking.service.AdditionalServiceService;
@@ -60,6 +60,7 @@ public class AdditionalServiceServiceImpl implements AdditionalServiceService {
         return additionalServices.stream().map(this::convertToAdditionalServiceDto).collect(Collectors.toList());
     }
 
+    @Override
     public AdditionalServiceDto convertToAdditionalServiceDto(AdditionalService additionalService) {
         AdditionalServiceDto additionalServiceDto = new AdditionalServiceDto();
         additionalServiceDto.setId(additionalService.getId());
@@ -69,6 +70,17 @@ public class AdditionalServiceServiceImpl implements AdditionalServiceService {
         return additionalServiceDto;
     }
 
+    @Override
+    public AdditionalService convertToAdditionalService(AdditionalServiceDto additionalServiceDto) {
+        AdditionalService additionalService = new AdditionalService();
+        additionalService.setId(additionalServiceDto.getId());
+        additionalService.setName(additionalServiceDto.getName());
+        additionalService.setDescription(additionalServiceDto.getDescription());
+        additionalService.setPrice(additionalServiceDto.getPrice());
+        return additionalService;
+    }
+
+    @Override
     public AdditionalService createAdditionalService(AdditionalServiceDto additionalServiceDto, AdditionalService additionalService) {
         additionalService.setName(additionalServiceDto.getName());
         additionalService.setDescription(additionalServiceDto.getDescription());

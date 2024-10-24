@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>User details</title>
+    <link rel="stylesheet" th:href="@{../../css/styles.css}" type="text/css">
+    <link rel="icon" type="image/x-icon" href="./../img/logo.png">
+</head>
+<div th:insert="common/header :: header"></div>
+<div id="main">
+    <div class="main-space-hr"></div>
+    <div class="main-header">
+        <h1>CUSTOMERS LIST</h1>
+    </div>
+    <div class="main-space-hr">
+        <hr>
+    </div>
+    <div class="main-content">
+        <div class="main-content-header">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="table_room_number">ROOM NUMBER</th>
+                    <th>ROOM TYPE</th>
+                    <th>PRICE</th>
+                    <th>ACTIONS</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.username}"></td>
+                    <td th:text="${user.firstName}"></td>
+                    <td th:text="${user.lastName}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.phoneNumber}"></td>
+                    <td>
+                        <a th:href="@{/users/{id}(id=${user.id})}" class="button">VIEW</a>
+                    </td>
+            </table>
+            <a href="rooms/createRoomForm" class="input-button">CREATE NEW ROOM</a>
+            <a href="/rooms/available" class="input-button">AVAILABILITY ROOMS</a>
+            <a href="/rooms/unavailable" class="input-button">UNAVAILABILITY ROOMS</a>
+        </div>
+    </div>
+</div>
+<div th:insert="common/footer :: footer"></div>

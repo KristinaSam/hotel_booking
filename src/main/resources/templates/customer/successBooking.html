@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Success reservation</title>
+    <link rel="stylesheet" th:href="@{../../css/styles.css}" type="text/css">
+    <link rel="icon" type="image/x-icon" href="./../img/logo.png">
+</head>
+<div th:insert="common/header :: header"></div>
+<div id="main">
+    <div class="main-space-hr"></div>
+    <div class="main-header">
+        <h1></h1>
+        <span>
+        </span>
+    </div>
+    <div class="main-space-hr">
+        <hr>
+    </div>
+    <div class="main-content">
+        <div class="main-content-header">
+            <div class="form-style">
+                <div class="div-form">
+                    <h1 th:text="${message}"></h1>
+                    <nav>
+
+                    </nav>
+                    <main>
+                        <section>
+                            <h2>Hello, <span th:text="${user.firstName}"></span>!</h2>
+                            <p>You reservation has been successfully registered.</p>
+                        </section>
+                        <ul>
+                            <li><a th:href="@{/dashboard}" class="input-button">Personal account</a></li>
+                            <li><a th:href="@{/home}" class="input-button">Home page</a></li>
+                        </ul>
+                    </main>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div th:insert="common/footer :: footer"></div>

@@ -1,39 +1,57 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Register</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="utf-8"/>
+    <title>Sign up</title>
+    <link rel="stylesheet" th:href="@{../../css/styles.css}" type="text/css">
 </head>
-<body>
-<h1>REGISTER</h1>
-<form th:action="@{/register}" method="post">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required/>
-    <br/>
+<div th:insert="common/header :: header"></div>
+<div id="main">
+    <div class="main-space-hr"></div>
+    <div class="main-header">
+        <h1>SIGN UP</h1>
+        <span>
+        </span>
+    </div>
+    <div class="main-space-hr">
+        <hr>
+    </div>
+    <div class="main-content">
+        <div class="main-content-header">
+            <div class="form-style">
+                <div class="div-form">
+                    <h1>REGISTRATION</h1>
+                    <form th:action="@{/register}" method="post">
+                        <label for="username">Username:</label><br>
+                        <input class="item" type="text" id="username" name="username" required/>
+                        <br>
+                        <label for="password">Password:</label><br>
+                        <input class="item" type="password" id="password" name="password" required/>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required/>
-    <br/>
+                        <br>
+                        <label>Email:</label><br>
+                        <input class="item" type="email" id="email" name="email" required/>
 
-    <label>Email:</label>
-    <input type="email" id="email" name="email" required/>
-    <br/>
+                        <br>
+                        <label>First name:</label><br>
+                        <input class="item" type="text" id="firstName" name="firstName" required/>
 
-    <label>First name:</label>
-    <input type="text" id="firstName" name="firstName" required/>
-    <br/>
+                        <br>
+                        <label>Last name:</label><br>
+                        <input class="item" type="text" id="lastName" name="lastName" required/>
 
-    <label>Last name:</label>
-    <input type="text" id="lastName" name="lastName" required/>
-    <br/>
+                        <br>
+                        <label>Phone Number:</label><br>
+                        <input class="item" type="tel" id="phoneNumber" name="phoneNumber" required/>
+                        <br>
 
-    <label>Phone Number:</label>
-    <input type="tel" id="phoneNumber" name="phoneNumber" required/>
-    <br/>
-
-    <button type="submit">Sign up</button>
-</form>
-<a th:href="@{/}">Back to Home</a>
-<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
-</body>
-</html>
+                        <button class="input-button" type="submit">Sign up</button>
+                    </form>
+                    <br>
+                    <a class="input-button" th:href="@{/login}">Log in</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:insert="common/footer :: footer"></div>

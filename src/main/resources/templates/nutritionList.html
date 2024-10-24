@@ -1,44 +1,54 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meal plan list</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="utf-8"/>
+    <title>Meal plan</title>
+    <link rel="stylesheet" th:href="@{../../css/styles.css}" type="text/css">
+    <link rel="icon" type="image/x-icon" href="./../img/logo.png">
 </head>
-<body>
-<div class="container">
-    <h1 class="text-center">MEAL PLAN LIST</h1>
-    <a href="/nutrition/createNutritionForm" class="btn btn-primary mb-3">CREATE NEW MEAL PLAN</a>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>MEAL PLAN</th>
-            <th>DESCRIPTION</th>
-            <th>PRICE</th>
-            <th>ACTIONS</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="nutrition : ${nutritionList}">
-            <td th:text="${nutrition.name}"></td>
-            <td th:text="${nutrition.description}"></td>
-            <td th:text="${nutrition.price} + ' €'"></td>
-            <td>
-                <div class="btn-group" role="group" aria-label="Actions">
-                    <a th:href="@{/nutrition/{id}(id=${nutrition.id})}" class="btn btn-info btn-sm">VIEW</a>
-                    <a th:href="@{/nutrition/{id}/edit(id=${nutrition.id})}" class="btn btn-warning btn-sm">EDIT</a>
-                    <a th:href="@{/nutrition/{id}/delete(id=${nutrition.id})}" class="btn btn-danger btn-sm">DELETE</a>
-                </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-
-    <a href="/" class="btn btn-secondary">BACK TO HOMEPAGE</a>
+<div th:insert="common/header :: header"></div>
+<div id="main">
+    <div class="main-space-hr"></div>
+    <div class="main-header">
+        <h1>MEAL PLAN LIST</h1>
+        <span>
+        </span>
+    </div>
+    <div class="main-space-hr">
+        <hr>
+    </div>
+    <div class="main-content">
+        <div class="main-content-header">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>MEAL PLAN</th>
+                    <th style="width: 60%">DESCRIPTION</th>
+                    <th>PRICE</th>
+                    <th>ACTIONS</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="nutrition : ${nutritionList}">
+                    <td th:text="${nutrition.name}"></td>
+                    <td th:text="${nutrition.description}"></td>
+                    <td th:text="${nutrition.price} + ' €'"></td>
+                    <td>
+                        <div class="btn-group" role="group" aria-label="Actions">
+                            <a th:href="@{/nutrition/{id}(id=${nutrition.id})}" class="button"
+                               style="float: left; margin: 2px; padding: 2px">VIEW</a>
+                            <a th:href="@{/nutrition/{id}/edit(id=${nutrition.id})}" class="button"
+                               style="float: left; margin: 2px; padding: 2px">EDIT</a>
+                            <a th:href="@{/nutrition/{id}/delete(id=${nutrition.id})}" class="button"
+                               style="float: left; margin: 2px; padding: 2px">DELETE</a>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <a href="nutrition/createNutritionForm" class="input-button">CREATE NEW MEAL PLAN</a>
+            <a href="/home" class="input-button">BACK TO HOMEPAGE</a>
+        </div>
+    </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+<div th:insert="common/footer :: footer"></div>

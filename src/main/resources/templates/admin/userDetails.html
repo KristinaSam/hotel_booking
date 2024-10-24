@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Users</title>
+    <link rel="stylesheet" th:href="@{../../css/styles.css}" type="text/css">
+    <link rel="icon" type="image/x-icon" href="./../img/logo.png">
+</head>
+<div th:insert="common/header :: header"></div>
+<div id="main">
+    <div class="main-space-hr"></div>
+    <div class="main-header">
+        <h1>CUSTOMER DETAILS</h1>
+        <span>
+        </span>
+    </div>
+    <div class="main-space-hr">
+        <hr>
+    </div>
+    <div class="main-content">
+        <div class="main-content-header">
+            <div class="form-style">
+                <div class="div-form">
+                    <p th:text="${user.id}"></p>
+                    <br>
+                    <p th:text="${user.username}"></p>
+                    <br>
+                    <p th:text="${user.firstName}"></p>
+                    <br>
+                    <p th:text="${user.lastName}"></p>
+                    <br>
+                    <p th:text="${user.email}"></p>
+                    <br>
+                    <p th:text="${user.phoneNumber}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+<div th:insert="common/footer :: footer"></div>

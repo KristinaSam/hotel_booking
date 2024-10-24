@@ -1,6 +1,6 @@
 package com.academy.hotel_booking.service.impl;
 
-import com.academy.hotel_booking.dto.nutritionDto.NutritionDto;
+import com.academy.hotel_booking.dto.NutritionDto;
 import com.academy.hotel_booking.model.entity.Nutrition;
 import com.academy.hotel_booking.model.repository.NutritionRepository;
 import com.academy.hotel_booking.service.NutritionService;
@@ -62,10 +62,12 @@ public class NutritionServiceImpl implements NutritionService {
         return convertToNutritionDto(nutrition);
     }
 
+    @Override
     public boolean isNutritionNameExists(String name) {
         return nutritionRepository.findByName(name).isPresent();
     }
 
+    @Override
     public NutritionDto convertToNutritionDto(Nutrition nutrition) {
         NutritionDto nutritionDto = new NutritionDto();
         nutritionDto.setId(nutrition.getId());
@@ -73,5 +75,15 @@ public class NutritionServiceImpl implements NutritionService {
         nutritionDto.setDescription(nutrition.getDescription());
         nutritionDto.setPrice(nutrition.getPrice());
         return nutritionDto;
+    }
+
+    @Override
+    public Nutrition convertToNutrition(NutritionDto nutritionDto) {
+        Nutrition nutrition = new Nutrition();
+        nutrition.setId(nutritionDto.getId());
+        nutrition.setName(nutritionDto.getName());
+        nutrition.setDescription(nutritionDto.getDescription());
+        nutrition.setPrice(nutritionDto.getPrice());
+        return nutrition;
     }
 }

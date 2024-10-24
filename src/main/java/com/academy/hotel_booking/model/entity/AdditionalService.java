@@ -3,6 +3,7 @@ package com.academy.hotel_booking.model.entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -27,5 +28,6 @@ public class AdditionalService {
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "additionalServices")
     @JsonManagedReference
+    @ToString.Exclude
     private List<Booking> bookingList;
 }

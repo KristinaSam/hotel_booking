@@ -1,7 +1,7 @@
 package com.academy.hotel_booking.service.impl;
 
-import com.academy.hotel_booking.dto.customerDto.UserDto;
-import com.academy.hotel_booking.dto.customerDto.UserRegistrationDto;
+import com.academy.hotel_booking.dto.UserDto;
+import com.academy.hotel_booking.dto.UserRegistrationDto;
 import com.academy.hotel_booking.exception.UserNotFoundException;
 import com.academy.hotel_booking.exception.UserAlreadyExistsException;
 import com.academy.hotel_booking.model.entity.enums.Role;

@@ -9,5 +9,4 @@ import java.util.Optional;
 @Repository
 public interface NutritionRepository extends JpaRepository<Nutrition, Integer> {
     Optional<Nutrition> findByName(String name);
-    boolean existsByName(String name);
 }

@@ -1,7 +1,7 @@
 package com.academy.hotel_booking.service.impl;
 
-import com.academy.hotel_booking.dto.bookingDto.BookingDto;
-import com.academy.hotel_booking.dto.roomDto.RoomDto;
+import com.academy.hotel_booking.dto.BookingDto;
+import com.academy.hotel_booking.dto.RoomDto;
 import com.academy.hotel_booking.model.entity.Booking;
 import com.academy.hotel_booking.model.entity.Room;
 import com.academy.hotel_booking.model.repository.BookingRepository;
@@ -73,6 +73,7 @@ public class RoomServiceImpl implements RoomService {
             throw new RuntimeException("Room not found with id: " + roomId);
         }
     }
+
     public List<RoomDto> getRoomsByIds(List<Integer> roomIds) {
         List<Room> rooms = roomRepository.findAllById(roomIds);
         return rooms.stream().map(this::convertToRoomDto).collect(Collectors.toList());
@@ -82,7 +83,6 @@ public class RoomServiceImpl implements RoomService {
     public boolean isRoomNumberExists(Integer roomNumber) {
         return roomRepository.existsByNumber(roomNumber);
     }
-
 
 
     @Override
@@ -109,6 +109,19 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
+    public Room convertToRoom(RoomDto roomDto) {
+        Room room = new Room();
+        room.setId(roomDto.getId());
+        room.setNumber(roomDto.getNumber());
+        room.setAvailability(roomDto.getAvailability());
+        room.setPrice(roomDto.getPrice());
+        if (roomDto.getRoomTypeDto() != null) {
+            room.setRoomType(roomTypeService.convertToRoomType(roomDto.getRoomTypeDto()));
+        }
+        return room;
+    }
+
+    @Override
     public boolean isRoomAvailable(RoomDto room, BookingDto bookingDto) {
         List<Booking> bookings = bookingRepository.findByRooms_Id(room.getId());
         for (Booking booking : bookings) {
@@ -120,29 +133,5 @@ public class RoomServiceImpl implements RoomService {
         }
         return true;
     }
-    @Override
-    public List<RoomDto> findAvailableRoomsForBooking(LocalDate checkInDate, LocalDate checkOutDate, Integer adultsCount, Integer childrenCount) {
-        List<Room> allAvailableRooms = roomRepository.findByAvailabilityTrue();
-        List<Room> filteredRooms = allAvailableRooms.stream()
-                .filter(room -> {
-                    boolean isBooked = room.getBookingList().stream().anyMatch(booking ->
-                            (booking.getCheckInDate().isBefore(checkOutDate) && booking.getCheckOutDate().isAfter(checkInDate))
-                    );
-                    return !isBooked;
-                })
-                .filter(room -> {
-                    return room.getRoomType().getCapacity() >= (adultsCount + childrenCount);
-                })
-                .toList();
-        return filteredRooms.stream()
-                .map(this::convertToRoomDto)
-                .collect(Collectors.toList());
-    }
 
-    public int calculateTotalCapacity(List<Integer> selectedRoomIds) {
-        return roomRepository.findAllById(selectedRoomIds)
-                .stream()
-                .mapToInt(room -> room.getRoomType().getCapacity())
-                .sum();
-    }
 }

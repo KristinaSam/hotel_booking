@@ -1,8 +1,9 @@
 package com.academy.hotel_booking.controller;
 
-import com.academy.hotel_booking.dto.roomTypeDto.RoomTypeDto;
+import com.academy.hotel_booking.dto.RoomTypeDto;
 import com.academy.hotel_booking.service.RoomTypeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,37 +27,43 @@ public class RoomTypeController {
         return "roomTypesList";
     }
 
-        @GetMapping("/roomTypes/{id}")
+    @GetMapping("/roomTypes/{id}")
     public String getRoomTypeById(@PathVariable Integer id, Model model) {
         RoomTypeDto roomTypeDto = roomTypeService.findRoomTypeById(id);
         model.addAttribute("roomType", roomTypeDto);
         return "roomTypeDetails";
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/roomTypes/createRoomTypeForm")
     public String showCreateRoomTypeForm(Model model) {
         model.addAttribute("roomType", new RoomTypeDto());
-        return "createRoomTypeForm";
+        return "admin/createRoomTypeForm";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/roomTypes/newRoomTypes")
     public String createRoomType(@ModelAttribute("roomType") RoomTypeDto roomTypeDto, RedirectAttributes redirectAttributes) {
         try {
             roomTypeService.saveRoomType(roomTypeDto);
             redirectAttributes.addFlashAttribute("successMessage", "Room type " + roomTypeDto.getName().toUpperCase() + " created successfully!");
-            return "redirect:/roomTypes/createRoomTypeForm";                                                               // можно перенаправить на /roomTypes, но тогда не будет сообщения об успешном создании
-        } catch (RuntimeException e) {                                                                                     // или перенаправлять на отдельную страницу с сообщением об успешном создании
+            return "redirect:/roomTypes/createRoomTypeForm";
+        } catch (
+                RuntimeException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "This room type already exists!");
             return "redirect:/roomTypes/createRoomTypeForm";
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/roomTypes/{id}/edit")
     public String editRoomTypeForm(@PathVariable Integer id, Model model) {
         RoomTypeDto roomTypeDto = roomTypeService.findRoomTypeById(id);
         model.addAttribute("roomType", roomTypeDto);
-        return "roomTypeEditForm";
+        return "admin/roomTypeEditForm";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/roomTypes/{id}/update")
     public String updateRoomType(@PathVariable Integer id, @ModelAttribute("roomType") RoomTypeDto roomTypeDto) {
         roomTypeDto.setId(id);
@@ -64,12 +71,15 @@ public class RoomTypeController {
         return "redirect:/roomTypes";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/roomTypes/{id}/delete")
     public String confirmDeleteRoomType(@PathVariable Integer id, Model model) {
         RoomTypeDto roomTypeDto = roomTypeService.findRoomTypeById(id);
         model.addAttribute("roomType", roomTypeDto);
-        return "confirmDeleteRoomType";
+        return "admin/confirmDeleteRoomType";
     }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/roomTypes/{id}/delete")
     public String deleteRoomType(@PathVariable Integer id) {
         roomTypeService.deleteRoomType(id);

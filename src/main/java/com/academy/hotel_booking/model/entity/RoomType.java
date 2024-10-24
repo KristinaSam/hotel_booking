@@ -3,7 +3,6 @@ package com.academy.hotel_booking.model.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
 import lombok.ToString;
 
 import java.util.List;

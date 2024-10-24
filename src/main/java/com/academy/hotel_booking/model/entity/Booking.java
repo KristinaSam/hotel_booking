@@ -20,7 +20,7 @@ public class Booking {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     @JsonBackReference
     private User user;
 
@@ -34,7 +34,7 @@ public class Booking {
     private List<Room> rooms;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "nutrition_id", nullable = false)
+    @JoinColumn(name = "nutrition_id")
     @JsonBackReference
     private Nutrition nutrition;
 
@@ -62,13 +62,6 @@ public class Booking {
     private Integer childrenCount;
 
     @Enumerated(EnumType.STRING)
-    @JsonManagedReference
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "booking_booking_statuses", joinColumns = @JoinColumn(name = "booking_id"))
-    @Column(name = "booking_statuses")
-    private List<BookingStatus> bookingStatuses;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "booking", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JsonManagedReference
-    private List<Payment> paymentList;
+    @Column(name = "booking_status")
+    private BookingStatus bookingStatus;
 }

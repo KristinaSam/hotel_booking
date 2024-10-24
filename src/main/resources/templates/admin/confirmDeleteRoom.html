@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Delete room form</title>
+    <link rel="stylesheet" th:href="@{../../css/styles.css}" type="text/css">
+    <link rel="icon" type="image/x-icon" href="./../img/logo.png">
+</head>
+<div th:insert="common/header :: header"></div>
+<div id="main">
+    <div class="main-space-hr"></div>
+    <div class="main-header">
+        <h1>DELETE ROOM</h1>
+        <span>
+        </span>
+    </div>
+    <div class="main-space-hr">
+        <hr>
+    </div>
+    <div class="main-content">
+        <div class="main-content-header">
+            <div class="form-style">
+                <div class="div-form">
+                    <h2>CONFIRM DELETE ROOM</h2>
+                    <div class="alert alert-warning">
+                        <strong>WARNING!</strong> Are you sure you want to delete the following room?
+                    </div>
+                    <div>
+                        <p><strong>ID:</strong> <span th:text="${room.id}"></span></p>
+                        <p><strong>ROOM TYPE:</strong> <span th:text="${room.roomTypeDto.description}"></span></p>
+                        <p><strong>ROOM NUMBER:</strong> <span th:text="${room.number}"></span></p>
+                        <p><strong>CAPACITY:</strong> <span th:text="${room.roomTypeDto.capacity}"></span></p>
+                        <p><strong>PRICE:</strong> <span th:text="${room.price} + ' €'"></span></p>
+                    </div>
+                    <form th:action="@{/rooms/{id}/delete(id=${room.id})}" method="post">
+                        <button type="submit" class="input-button">DELETE</button>
+                        <a href="/rooms" class="input-button">CANCEL</a>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+<div th:insert="common/footer :: footer"></div>

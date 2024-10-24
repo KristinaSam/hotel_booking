@@ -1,0 +1,31 @@
+<body th:fragment="header">
+<div class="header-toolbox">
+    <div class="toolbox">
+        <div class="logo-top">
+            <div class="logo-top-img"><img src="../img/head-logo.png"></div>
+            <div class="logo-top-text">Welcome to the Hotel</div>
+        </div>
+        <div class="quick-list">
+            <div th:if="${isCustomer}"><a class="quick-list-link" th:href="@{/dashboard}">Personal account</a></div>
+            <div th:if="${isCustomer}"><a class="quick-list-link" th:href="@{/}">Log out</a></div>
+        </div>
+    </div>
+</div>
+</div>
+<div id="header">
+    <div class="navigation">
+        <div class="navi-menu">
+            <nav>
+                <ul class="menu">
+                    <li class="menu-1depth"><a class="menu-1depth-text"  th:href="@{/home}">HOME</a></li>
+                    <li class="menu-1depth"><a class="menu-1depth-text" th:href="@{/roomTypes}">ROOM TYPES</a></li>
+                    <li class="menu-1depth"><a class="menu-1depth-text" th:href="@{/rooms}">ROOMS</a></li>
+                    <li class="menu-1depth"><a class="menu-1depth-text" th:href="@{/nutrition}">MEAL PLAN</a></li>
+                    <li class="menu-1depth"><a class="menu-1depth-text" th:href="@{/additionalServices}">ADDITIONAL SERVICES</a></li>
+                    <li class="menu-1depth"><a class="menu-1depth-text" th:href="@{/bookings/bookingForm}">RESERVATION</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+

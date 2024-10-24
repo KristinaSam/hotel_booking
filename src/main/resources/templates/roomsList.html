@@ -1,40 +1,44 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Rooms List</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <meta charset="utf-8"/>
+    <title>Rooms list</title>
+    <link rel="stylesheet" th:href="@{../../css/styles.css}" type="text/css">
+    <link rel="icon" type="image/x-icon" href="./../img/logo.png">
 </head>
-<body>
-<div class="container mt-5">
-    <h2>ROOMS LIST</h2>
-    <a href="/rooms/createRoomForm" class="btn btn-primary mb-3">CREATE NEW ROOM</a>
-    <a href="/rooms/available" class="btn btn-primary mb-3">AVAILABLE ROOMS</a>
-    <a href="/rooms/unavailable" class="btn btn-primary mb-3">UNAVAILABLE ROOMS</a>
-    <table class="table table-striped">
-        <thead>
-        <tr>
-
-            <th>ROOM NUMBER</th>
-            <th>ROOM TYPE</th>
-            <th>PRICE</th>
-            <th>AVAILABILITY</th>
-            <th>ACTIONS</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="room : ${rooms}">
-            <td th:text="${room.number}"></td>
-            <td th:text="${room.roomTypeDto.name}"></td>
-            <td th:text="${room.price} + ' €'"></td>
-            <td th:text="${room.availability ? 'Available' : 'Not Available'}"></td>
-
-            <td>
-                <a th:href="@{/rooms/{id}(id=${room.id})}" class="btn btn-info btn-sm">VIEW</a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <a href="/" class="btn btn-secondary">BACK TO HOMEPAGE</a>
+<div th:insert="common/header :: header"></div>
+<div id="main">
+    <div class="main-space-hr"></div>
+    <div class="main-header">
+        <h1>ROOMS LIST</h1>
+    </div>
+    <div class="main-space-hr">
+        <hr>
+    </div>
+    <div class="main-content">
+        <div class="main-content-header">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="table_room_number">ROOM NUMBER</th>
+                    <th>ROOM TYPE</th>
+                    <th>PRICE</th>
+                    <th>ACTIONS</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="room : ${rooms}">
+                    <td class="table_td_center" th:text="${room.number}"></td>
+                    <td th:text="${room.roomTypeDto.name}"></td>
+                    <td class="table_td_center" th:text="${room.price} + ' €'"></td>
+                    <td>
+                        <a th:href="@{/rooms/{id}(id=${room.id})}" class="button">VIEW</a>
+                    </td>
+            </table>
+            <a href="rooms/createRoomForm" class="input-button">CREATE NEW ROOM</a>
+            <a href="/rooms/available" class="input-button">AVAILABILITY ROOMS</a>
+            <a href="/rooms/unavailable" class="input-button">UNAVAILABILITY ROOMS</a>
+        </div>
+    </div>
 </div>
-</body>
-</html>
+<div th:insert="common/footer :: footer"></div>

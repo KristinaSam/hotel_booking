@@ -1,17 +1,15 @@
 package com.academy.hotel_booking.service.impl;
 
-import com.academy.hotel_booking.dto.customerDto.UserDto;
-import com.academy.hotel_booking.dto.additionalServiceDto.AdditionalServiceDto;
-import com.academy.hotel_booking.dto.bookingDto.BookingDto;
-import com.academy.hotel_booking.dto.nutritionDto.NutritionDto;
-import com.academy.hotel_booking.dto.roomDto.RoomDto;
+import com.academy.hotel_booking.dto.UserDto;
+import com.academy.hotel_booking.dto.AdditionalServiceDto;
+import com.academy.hotel_booking.dto.BookingDto;
+import com.academy.hotel_booking.dto.NutritionDto;
+import com.academy.hotel_booking.dto.RoomDto;
 import com.academy.hotel_booking.model.entity.*;
 import com.academy.hotel_booking.model.entity.enums.BookingStatus;
 import com.academy.hotel_booking.model.repository.*;
-import com.academy.hotel_booking.service.BookingService;
+import com.academy.hotel_booking.service.*;
 
-import com.academy.hotel_booking.service.RoomTypeService;
-import com.academy.hotel_booking.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,80 +19,19 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
+    private final AdditionalServiceService additionalServiceService;
+    private final NutritionService nutritionService;
+    private final RoomService roomService;
     private final RoomTypeService roomTypeService;
-    private final UserService userService;
     private final UserDetailsServiceImpl userDetailsService;
     private final BookingRepository bookingRepository;
-    private final UserRepository userRepository;
-    private final RoomRepository roomRepository;
-    private final NutritionRepository nutritionRepository;
-    private final AdditionalServiceRepository additionalServiceRepository;
 
     @Override
-    public void createBooking(Booking booking, BookingDto bookingDto) {
-        if (bookingDto.getUserDto() != null) {
-            User user = userDetailsService.convertToUser(bookingDto.getUserDto());
-            booking.setUser(user);
-        }
-
-        List<Room> rooms = roomRepository.findAllById(bookingDto.getRoomDtos().stream()
-                .map(RoomDto::getId)
-                .collect(Collectors.toList()));
-        booking.setRooms(rooms);
-
-        Nutrition nutrition = nutritionRepository.findById(bookingDto.getNutritionDto().getId())
-                .orElseThrow(() -> new RuntimeException("Nutrition not found"));
-        booking.setNutrition(nutrition);
-
-        List<AdditionalService> additionalServices = additionalServiceRepository.findAllById(
-                bookingDto.getAdditionalServiceDtos().stream()
-                        .map(AdditionalServiceDto::getId)
-                        .collect(Collectors.toList())
-        );
-        booking.setAdditionalServices(additionalServices);
-
-        booking.setCheckInDate(bookingDto.getCheckInDate());
-        booking.setCheckOutDate(bookingDto.getCheckOutDate());
-        booking.setAdultsCount(bookingDto.getAdultsCount());
-        booking.setChildrenCount(bookingDto.getChildrenCount());
-
-        if (booking.getId() == null) {
-            booking.setBookingStatuses(List.of(BookingStatus.PENDING));
-        } else {
-            booking.setBookingStatuses(bookingDto.getBookingStatuses());
-        }
-    }
-
-    @Override
-    public void saveBooking(BookingDto bookingDto) {
-        Booking booking;
-        if (bookingDto.getId() != null) {
-            booking = bookingRepository.findById(bookingDto.getId())
-                    .orElseThrow(() -> new RuntimeException("Booking not found"));
-        } else {
-            booking = new Booking();
-        }
-        createBooking(booking, bookingDto);
-        bookingRepository.save(booking);
-    }
-
-    @Override
-    public void updateBooking(BookingDto bookingDto) {
-        if (bookingDto.getId() == null) {
-            throw new IllegalArgumentException("Booking ID must not be null");
-        }
-        Booking booking = bookingRepository.findById(bookingDto.getId())
-                .orElseThrow(() -> new RuntimeException("Booking not found"));
-
-        createBooking(booking, bookingDto);
-        bookingRepository.save(booking);
-    }
-
-    @Override
-    public void deleteBooking(Integer id) {
+    public BookingDto deleteBooking(Integer id) {
         Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Booking not found with id: " + id));
         bookingRepository.delete(booking);
+        return null;
     }
 
     @Override
@@ -160,8 +97,93 @@ public class BookingServiceImpl implements BookingService {
                 .collect(Collectors.toList());
         bookingDto.setAdditionalServiceDtos(additionalServiceDtos);
 
-        bookingDto.setBookingStatuses(List.of(BookingStatus.PENDING));
+        bookingDto.setBookingStatus(BookingStatus.PENDING);
 
         return bookingDto;
+    }
+
+    @Override
+    public Booking creationBooking(BookingDto bookingDto) {
+        Booking booking = new Booking();
+        booking.setId(bookingDto.getId());
+        UserDto currentUser = userDetailsService.getCurrentUser();
+        booking.setUser(userDetailsService.convertToUser(currentUser));
+        bookingDto.setUserDto(currentUser);
+        booking.setCheckInDate(bookingDto.getCheckInDate());
+        booking.setCheckOutDate(bookingDto.getCheckOutDate());
+        booking.setAdultsCount(bookingDto.getAdultsCount());
+        booking.setChildrenCount(bookingDto.getChildrenCount());
+        booking.setBookingStatus(BookingStatus.PENDING);
+        Booking savedBooking = bookingRepository.save(booking);
+        bookingDto.setId(savedBooking.getId());
+        return savedBooking;
+
+    }
+
+    @Override
+    public void addSelectedRoomsToBooking(BookingDto bookingDto, List<Integer> selectedRoomIds) {
+        Booking booking = bookingRepository.findById(bookingDto.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Booking not found with id: " + bookingDto.getId()));
+        List<RoomDto> selectedRooms = roomService.getRoomsByIds(selectedRoomIds);
+        for (RoomDto roomDto : selectedRooms) {
+            Room room = roomService.convertToRoom(roomDto);
+            booking.getRooms().add(room);
+        }
+        bookingRepository.save(booking);
+    }
+
+    @Override
+    public void addSelectedNutritionToBooking(BookingDto bookingDto, Integer selectedNutritionId) {
+        Booking booking = bookingRepository.findById(bookingDto.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Booking not found with id: " + bookingDto.getId()));
+        NutritionDto nutritionDto = nutritionService.findNutritionById(selectedNutritionId);
+        booking.setNutrition(nutritionService.convertToNutrition(nutritionDto));
+        bookingRepository.save(booking);
+    }
+
+    public void addSelectedServicesToBooking(BookingDto bookingDto, List<Integer> selectedAdditionalServiceIds) {
+        Booking booking = bookingRepository.findById(bookingDto.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Booking not found with id: " + bookingDto.getId()));
+        List<AdditionalServiceDto> selectedAdditionalServices = additionalServiceService.findAllAdditionalServicesByIds(selectedAdditionalServiceIds);
+        for (AdditionalServiceDto additionalServiceDto : selectedAdditionalServices) {
+            AdditionalService additionalService = additionalServiceService.convertToAdditionalService(additionalServiceDto);
+            booking.getAdditionalServices().add(additionalService);
+        }
+        bookingRepository.save(booking);
+    }
+
+    @Override
+    public Boolean checkCapacityToRooms(BookingDto bookingDto) {
+        List<RoomDto> selectedRooms = bookingDto.getRoomDtos();
+        int totalCapacity = selectedRooms.stream()
+                .mapToInt(room -> room.getRoomTypeDto().getCapacity())
+                .sum();
+        int totalGuests = bookingDto.getAdultsCount() + bookingDto.getChildrenCount();
+        return totalCapacity <= totalGuests;
+    }
+
+    @Override
+    public void confirmBooking(BookingDto bookingDto) {
+        Booking booking = bookingRepository.findById(bookingDto.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Booking not found with id: " + bookingDto.getId()));
+        booking.setBookingStatus(BookingStatus.CONFIRMED);
+        bookingRepository.save(booking);
+    }
+
+    @Override
+    public void cancelBooking(BookingDto bookingDto) {
+        Booking booking = bookingRepository.findById(bookingDto.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Booking not found with id: " + bookingDto.getId()));
+        booking.setBookingStatus(BookingStatus.CANCELLED);
+        bookingRepository.save(booking);
+    }
+
+    @Override
+    public List<BookingDto> getBookingsByUsername(String username) {
+        List<Booking> bookings = bookingRepository.findByUserUsername(username);
+
+        return bookings.stream()
+                .map(this::convertToBookingDto) // Используем метод преобразования
+                .collect(Collectors.toList());
     }
 }

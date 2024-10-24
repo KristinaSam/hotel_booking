@@ -1,0 +1,128 @@
+CREATE SCHEMA 'hotel';
+
+CREATE TABLE `hotel`.`user_roles` (
+  `user_id` INT NOT NULL,
+  `roles` VARCHAR(45),
+  PRIMARY KEY (`user_id`),
+  CONSTRAINT `user_id`
+  FOREIGN KEY (`user_id`)
+  REFERENCES `hotel`.`user` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE);
+
+
+CREATE TABLE `hotel`.`user` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(255) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(45) NOT NULL,
+  `enabled` INT NOT NULL,
+  `credentials_non_expired` INT NOT NULL,
+  `account_non_expired` INT NOT NULL,
+  `account_non_locked` INT NOT NULL,
+  `first_name` VARCHAR(45) NULL,
+  `last_name` VARCHAR(45) NULL,
+  `phone_number` VARCHAR(45) NULL,
+   PRIMARY KEY (`id`),
+   UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
+   UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE);
+
+
+CREATE TABLE `hotel`.`room_type` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  `capacity` INT NOT NULL,
+  `description` VARCHAR(45) NULL,
+   PRIMARY KEY (`id`)
+   UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE);
+
+
+CREATE TABLE `hotel`.`room` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `room_type_id` INT NOT NULL,
+  `room_number` INT NOT NULL,
+  `availability` TINYINT(1) NOT NULL,
+  `price` DOUBLE NOT NULL,
+   PRIMARY KEY (`id`),
+   UNIQUE INDEX `room_number_UNIQUE` (`room_number` ASC) VISIBLE,
+   INDEX `room_type-id_idx` (`room_type_id` ASC) VISIBLE,
+   CONSTRAINT `room_type-id`
+   FOREIGN KEY (`room_type_id`)
+   REFERENCES `hotel`.`room_type` (`id`)
+   ON DELETE CASCADE
+   ON UPDATE CASCADE);
+
+
+CREATE TABLE `hotel`.`nutrition` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `description` VARCHAR(255) NULL,
+  `price` DOUBLE NOT NULL,
+   PRIMARY KEY (`id`),
+   UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE);
+
+
+CREATE TABLE `hotel`.`additional_service` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `description` VARCHAR(255) NULL,
+  `price` DOUBLE NOT NULL,
+   PRIMARY KEY (`id`));
+
+
+CREATE TABLE `hotel`.`bookin` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `user_id` INT NULL,
+  `nutrition_id` INT NULL,
+  `check_in_date` DATE NULL,
+  `check_out_date` DATE NULL,
+  `adult_count` INT NULL,
+  `children_count` INT NULL,
+  `booking_status` VARCHAR(45) NULL,
+   PRIMARY KEY (`id`),
+   INDEX `user-id_idx` (`user_id` ASC) VISIBLE,
+   INDEX `nutrition-id_idx` (`nutrition_id` ASC) VISIBLE,
+   CONSTRAINT `user-id`
+   FOREIGN KEY (`user_id`)
+   REFERENCES `hotel`.`user` (`id`)
+   ON DELETE CASCADE
+   ON UPDATE CASCADE,
+   CONSTRAINT `nutrition-id`
+   FOREIGN KEY (`nutrition_id`)
+   REFERENCES `hotel`.`nutrition` (`id`)
+   ON DELETE CASCADE
+   ON UPDATE CASCADE);
+
+
+CREATE TABLE `hotel`.`booking_room` (
+  `booking_id` INT NOT NULL,
+  `room_id` INT NOT NULL,
+   PRIMARY KEY (`booking_id`, `room_id`),
+   INDEX `room_id_idx` (`room_id` ASC) VISIBLE,
+   CONSTRAINT `booking_id`
+   FOREIGN KEY (`booking_id`)
+   REFERENCES `hotel`.`booking` (`id`)
+   ON DELETE CASCADE
+   ON UPDATE CASCADE,
+   CONSTRAINT `room_id`
+   FOREIGN KEY (`room_id`)
+   REFERENCES `hotel`.`room` (`id`)
+   ON DELETE CASCADE
+   ON UPDATE CASCADE);
+
+
+CREATE TABLE `hotel`.`additional_service_bookin` (
+  `additional_service_id` INT NOT NULL,
+  `booking_id` INT NOT NULL,
+   PRIMARY KEY (`additional_service_id`, `booking_id`),
+   INDEX `booking_id_idx` (`booking_id` ASC) VISIBLE,
+   CONSTRAINT `additional_service_id`
+   FOREIGN KEY (`additional_service_id`)
+   REFERENCES `hotel`.`additional_service` (`id`)
+   ON DELETE CASCADE
+   ON UPDATE CASCADE,
+   CONSTRAINT `booking_id`
+   FOREIGN KEY (`booking_id`)
+   REFERENCES `hotel`.`booking` (`id`)
+   ON DELETE CASCADE
+   ON UPDATE CASCADE);

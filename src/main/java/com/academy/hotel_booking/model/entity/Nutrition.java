@@ -3,8 +3,6 @@ package com.academy.hotel_booking.model.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
@@ -30,6 +28,4 @@ public class Nutrition {
     @OneToMany(mappedBy = "nutrition", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonBackReference
     private List<Booking> bookingList;
-
-
 }

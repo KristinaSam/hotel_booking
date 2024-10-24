@@ -1,6 +1,6 @@
 package com.academy.hotel_booking.service.impl;
 
-import com.academy.hotel_booking.dto.roomTypeDto.RoomTypeDto;
+import com.academy.hotel_booking.dto.RoomTypeDto;
 import com.academy.hotel_booking.model.entity.RoomType;
 import com.academy.hotel_booking.model.repository.RoomTypeRepository;
 import com.academy.hotel_booking.service.RoomTypeService;

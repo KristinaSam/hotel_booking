@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Edit service form</title>
+    <link rel="stylesheet" th:href="@{../../css/styles.css}" type="text/css">
+    <link rel="icon" type="image/x-icon" href="./../img/logo.png">
+</head>
+<div th:insert="common/header :: header"></div>
+<div id="main">
+    <div class="main-space-hr"></div>
+    <div class="main-header">
+        <h1>EDIT SERVICE</h1>
+        <span>
+        </span>
+    </div>
+    <div class="main-space-hr">
+        <hr>
+    </div>
+    <div class="main-content">
+        <div class="main-content-header">
+            <div class="form-style">
+                <div class="registration-cssave">
+                    <h1 class="text-center">EDIT ADDITIONAL SERVICE</h1>
+                    <form th:action="@{/additionalServices/{id}/update(id=${additionalService.id})}"
+                          th:object="${additionalService}" method="post">
+                        <div class="form-group">
+                            <label for="name">SERVICE</label><br>
+                            <input type="text" id="name" th:field="*{name}" class="item" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">DESCRIPTION</label><br>
+                            <textarea id="description" th:field="*{description}" class="item"
+                                      required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="capacity">PRICE</label><br>
+                            <input type="number" id="capacity" th:field="*{price}" class="item" required>
+                        </div>
+                        <button type="submit" class="input-button">UPDATE</button>
+                        <a href="/additionalServices" class="input-button">CANCEL</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<div th:insert="common/footer :: footer"></div>

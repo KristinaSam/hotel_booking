@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Account</title>
+    <link rel="stylesheet" th:href="@{../../css/styles.css}" type="text/css">
+    <link rel="icon" type="image/x-icon" href="./../img/logo.png">
+</head>
+<div th:insert="common/header :: header"></div>
+<div id="main">
+    <div class="main-space-hr"></div>
+    <div class="main-header">
+        <h1>PERSONAL ACCOUNT</h1>
+        <span>
+        </span>
+    </div>
+    <div class="main-space-hr">
+        <hr>
+    </div>
+    <div class="main-content">
+        <div class="main-content-header">
+            <div class="form-style">
+                <div class="div-form">
+                    <p>USERNAME: <span th:text="${user.username}"></span></p>
+                    <p>FIRST NAME: <span th:text="${user.firstName}"></span></p>
+                    <p>LAST NAME: <span th:text="${user.lastName}"></span></p>
+                    <p>EMAIL: <span th:text="${user.email}"></span></p>
+                    <p>PHONE NUMBER: <span th:text="${user.phoneNumber}"></span></p>
+                    <a href="/user/bookings" class="input-button">MY RESERVATION</a>
+                    <a href="/home" class="input-button">BACK TO HOMEPAGE</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:insert="common/footer :: footer"></div>

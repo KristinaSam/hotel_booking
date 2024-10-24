@@ -1,45 +1,66 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8" />
     <title>Login</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link>
+    <link rel="stylesheet" th:href="@{./css/styles.css}" type="text/css">
+    <link rel="icon" type="image/x-icon" href="./img/logo.png">
 </head>
 <body>
-<h1>Login</h1>
-<form th:action="@{/login}" method="post">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required />
-    <br/>
-
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required />
-    <br/>
-    <button type="submit">Login</button>
-</form>
-</body>
-</html>
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Homepage</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-</head>
-<body>
-<div class="container text-center hero">
-    <h1 class="display-4">Welcome to the Hotel!</h1>
-    <p class="lead">Enjoy a comfortable stay with us.</p>
-    <div class="mt-4">
-        <a th:href="@{/login}" class="btn btn-custom btn-lg">Sign in</a>
-        <a th:href="@{/register}" class="btn btn-custom btn-lg">Sign up</a>
-        <a th:href="@{/dashboard}" class="btn btn-custom btn-lg">Go to your personal account</a>
-        <a th:href="@{/rooms}" class="btn btn-custom btn-lg">Rooms</a>
-        <a th:href="@{/nutrition}" class="btn btn-custom btn-lg">Nutrition</a>
-        <a th:href="@{/additionalServices}" class="btn btn-custom btn-lg">AdditionalService</a>
-        <a th:href="@{/bookings/bookingForm}" class="btn btn-custom btn-lg">Book</a>
+<div class="header-toolbox">
+    <div class="toolbox">
+        <div class="logo-top">
+            <div class="logo-top-img"><img src="./img/head-logo.png"></div>
+            <div class="logo-top-text">Welcome to the Hotel</div>
+        </div>
+        <div class="quick-list">
+            <a class="quick-list-link" th:href="@{/dashboard}">Personal account</a>
+            <a class="quick-list-link" th:href="@{/}">Log out</a>
+        </div>
     </div>
 </div>
-</body>
-</html>
-
+<div id="header">
+    <div class="navigation">
+        <div class="navi-menu">
+            <nav>
+                <ul class="menu">
+                    <li class="menu-1depth"><a class="menu-1depth-text"  th:href="@{/home}">HOME</a></li>
+                    <li class="menu-1depth"><a class="menu-1depth-text" th:href="@{/roomTypes}">ROOM TYPES</a></li>
+                    <li class="menu-1depth"><a class="menu-1depth-text" th:href="@{/rooms}">ROOMS</a></li>
+                    <li class="menu-1depth"><a class="menu-1depth-text" th:href="@{/nutrition}">MEAL PLAN</a></li>
+                    <li class="menu-1depth"><a class="menu-1depth-text" th:href="@{/additionalServices}">ADDITIONAL SERVICES</a></li>
+                    <li class="menu-1depth"><a class="menu-1depth-text" th:href="@{/bookings/bookingForm}">RESERVATION</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+<div id="main">
+    <div class="main-space-hr"></div>
+    <div class="main-header">
+        <h1>LOGIN IN</h1>
+    </div>
+    <div class="main-space-hr"><hr></div>
+    <div class="main-content">
+        <div class="form-style">
+            <div class="registration-cssave">
+                <form th:action="@{/login}" method="post">
+                    <div class="form-login-img"><img src="./img/head-logo.png"></div>
+                    <div class="form-group">
+                        <input class="form-control item" type="text"  maxlength="15" minlength="4" pattern="^[a-zA-Z0-9_.-]*$" id="username" name="username"  placeholder="Username" required>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control item" type="password" minlength="6" id="password" name="password" placeholder="Password" required>
+                    </div>
+                    <div class="form-group-button">
+                        <button class="create-account" type="submit">Log in</button>
+                    </div>
+                    <div class="form-group-button">
+                        <a class="input-button" th:href="@{/register}">Sign Up</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<div th:insert="common/footer :: footer"></div>

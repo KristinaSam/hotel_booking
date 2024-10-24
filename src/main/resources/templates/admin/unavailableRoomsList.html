@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Unavailability rooms list</title>
+    <link rel="stylesheet" th:href="@{../../css/styles.css}" type="text/css">
+    <link rel="icon" type="image/x-icon" href="./../img/logo.png">
+</head>
+<div th:insert="common/header :: header"></div>
+<div id="main">
+    <div class="main-space-hr"></div>
+    <div class="main-header">
+        <h1>UNAVAILABLE ROOMS LIST</h1>
+    </div>
+    <div class="main-space-hr">
+        <hr>
+    </div>
+    <div class="main-content">
+        <div class="main-content-header">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ROOM NUMBER</th>
+                    <th>ROOM TYPE</th>
+                    <th>PRICE</th>
+                    <th>AVAILABILITY</th>
+                    <th>ACTIONS</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="room : ${unavailableRooms}">
+                    <td th:text="${room.number}"></td>
+                    <td th:text="${room.roomTypeDto.name}"></td>
+                    <td th:text="${room.price} + ' €'"></td>
+                    <td th:text="${room.availability ? 'Available' : 'Not Available'}"></td>
+                    <td>
+                        <a th:href="@{/rooms/{id}(id=${room.id})}" class="button">View</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <a href="/rooms" class="input-button">BACK TO ROOM LIST</a>
+        </div>
+    </div>
+<div th:insert="common/footer :: footer"></div>

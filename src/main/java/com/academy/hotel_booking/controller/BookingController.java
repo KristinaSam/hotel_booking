@@ -1,16 +1,17 @@
 package com.academy.hotel_booking.controller;
 
-import com.academy.hotel_booking.dto.additionalServiceDto.AdditionalServiceDto;
-import com.academy.hotel_booking.dto.bookingDto.BookingDto;
-import com.academy.hotel_booking.dto.customerDto.UserDto;
-import com.academy.hotel_booking.dto.nutritionDto.NutritionDto;
-import com.academy.hotel_booking.dto.roomDto.RoomDto;
+import com.academy.hotel_booking.dto.*;
+import com.academy.hotel_booking.model.entity.Booking;
 import com.academy.hotel_booking.service.*;
 import com.academy.hotel_booking.service.impl.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,167 +43,122 @@ public class BookingController {
         return "bookingDetails";
     }
 
-//    @GetMapping("/bookings/bookingForm")
-//    public String showBookingForm(Model model) {
-//        model.addAttribute("bookingDto", new BookingDto());
-//        return "cust/bookingForm";
-//   }
-
-//    @PostMapping("/bookings/searchRooms")
-//    public String searchAvailableRooms(@ModelAttribute BookingDto bookingDto, Model model) {
-//        List<RoomDto> allAvailableRooms = roomService.getAvailableRooms();
-//        List<RoomDto> filteredRooms = allAvailableRooms.stream()
-//                .filter(room -> roomService.isRoomAvailable(room, bookingDto))
-//                .collect(Collectors.toList());
-//        model.addAttribute("filteredRooms", filteredRooms);
-//        model.addAttribute("bookingDto", bookingDto);
-//        return "customer/searchRooms";
-//    }
-//
-//    @PostMapping("/bookings/chooseRooms")
-//    public String chooseRooms(@RequestParam List<Integer> selectedRoomIds, @ModelAttribute BookingDto bookingDto, Model model) {
-//        List<RoomDto> selectedRooms = roomService.getRoomsByIds(selectedRoomIds);
-//        bookingDto.setRoomDtos(selectedRooms);
-//        model.addAttribute("selectedRooms", selectedRooms);
-//        model.addAttribute("bookingDto", bookingDto);
-//
-//        List<NutritionDto> nutritionList = nutritionService.findAllNutrition();
-//        model.addAttribute("nutritionList", nutritionList);
-//        model.addAttribute("bookingDto", bookingDto);
-//        return "customer/chooseNutrition";
-//    }
-//
-//    @PostMapping("/bookings/chooseNutrition")
-//    public String chooseNutrition(@RequestParam Integer selectedNutritionId,
-//                                  @ModelAttribute BookingDto bookingDto,
-//                                  Model model) {
-//        if (selectedNutritionId == null) {
-//            System.out.println("selectedNutritionId is null");
-//        } else {
-//            System.out.println("selectedNutritionId: " + selectedNutritionId);
-//        }
-//        NutritionDto nutritionDto = nutritionService.findNutritionById(selectedNutritionId);
-//        bookingDto.setNutritionDto(nutritionDto);
-//
-//        model.addAttribute("nutritionDto", nutritionDto);
-//        model.addAttribute("bookingDto", bookingDto);
-//
-//        List<AdditionalServiceDto> additionalServiceList = additionalServiceService.findAllAdditionalServices();
-//        model.addAttribute("additionalServiceList", additionalServiceList);
-//        model.addAttribute("bookingDto", bookingDto);
-//        return "customer/chooseServices";
-//    }
-//
-//    @PostMapping("/bookings/chooseServices")
-//    public String chooseServices(@RequestParam List<Integer> selectedAdditionalServiceIds, @ModelAttribute BookingDto bookingDto, Model model) {
-//        List<AdditionalServiceDto> selectedAdditionalServices = additionalServiceService.findAllAdditionalServicesByIds(selectedAdditionalServiceIds);
-//        bookingDto.setAdditionalServiceDtos(selectedAdditionalServices);
-//        model.addAttribute("selectedAdditionalServices", selectedAdditionalServices);
-//        model.addAttribute("bookingDto", bookingDto);
-//
-//        return "customer/allBooking";
-//    }
-//
-//    @PostMapping("/bookings/confirmBooking")
-//    public String confirmBooking(@ModelAttribute BookingDto bookingDto, Model model) {
-//        // проверка выбраны ли комнаты
-//        if (bookingDto.getRoomDtos() == null || bookingDto.getRoomDtos().isEmpty()) {
-//            model.addAttribute("error", "Пожалуйста, выберите хотя бы одну комнату.");
-//            return "customer/bookingForm";
-//        }
-//
-//        // проверка вместимости
-//        List<RoomDto> selectedRooms = bookingDto.getRoomDtos();
-//        int totalCapacity = selectedRooms.stream()
-//                .mapToInt(room -> room.getRoomTypeDto().getCapacity())
-//                .sum();
-//
-//        int totalGuests = bookingDto.getAdultsCount() + bookingDto.getChildrenCount();
-//        if (totalCapacity < totalGuests) {
-//            model.addAttribute("error", "Выбранные комнаты не могут вместить указанное количество людей.");
-//            return "customer/bookingForm";
-//        }
-//
-//        // Установка текущего пользователя
-//        UserDto currentUser = userDetailsService.getCurrentUser();
-//        bookingDto.setUserDto(currentUser);
-//
-//        // Сохранение бронирования в базе данных
-//        bookingService.saveBooking(bookingDto);
-//
-//        // Добавляем сообщение об успешном бронировании
-//        model.addAttribute("message", "Ваше бронирование успешно подтверждено!");
-//        model.addAttribute("booking", bookingDto);                                     // информация для страницы подтверждения бронирования
-//
-//        return "customer/confirmationBooking";
-//    }
-
     @GetMapping("/bookings/bookingForm")
     public String showBookingForm(Model model) {
         BookingDto bookingDto = new BookingDto();
         model.addAttribute("bookingDto", bookingDto);
-        System.out.println(bookingDto);
-        return "customer/accord";
+        return "customer/bookingForm";
     }
 
-    @PostMapping("/bookings/processBooking")
-    public String processBooking(@ModelAttribute BookingDto bookingDto, Model model) {
-        model.addAttribute("bookingDto", bookingDto);
+    @PostMapping("/bookings/searchRooms")
+    public String chooseRooms(@ModelAttribute BookingDto bookingDto, Model model) {
 
-        List<RoomDto> filteredRooms = roomService.getAvailableRooms().stream()
+        Booking savedBooking = bookingService.creationBooking(bookingDto);
+        bookingDto.setId(savedBooking.getId());
+        model.addAttribute("bookingDto", bookingDto);
+        System.out.println(bookingDto);
+
+        List<RoomDto> allAvailableRooms = roomService.getAvailableRooms();
+        List<RoomDto> filteredRooms = allAvailableRooms.stream()
                 .filter(room -> roomService.isRoomAvailable(room, bookingDto))
                 .collect(Collectors.toList());
         model.addAttribute("filteredRooms", filteredRooms);
         model.addAttribute("bookingDto", bookingDto);
-        if (bookingDto.getRoomDtos() == null || bookingDto.getRoomDtos().isEmpty()) {
-            model.addAttribute("error", "Пожалуйста, выберите хотя бы одну комнату.");
-            return "customer/accord";
-        }
-   //        if (filteredRooms.isEmpty()) {
-//            model.addAttribute("error", "Нет доступных номеров для выбранных дат.");
-//        } else {
-//            model.addAttribute("filteredRooms", filteredRooms);
-//
-//        }
-//        List<RoomDto> selectedRooms = bookingDto.getRoomDtos();
-//        model.addAttribute("selectedRooms", selectedRooms);
-//        model.addAttribute("bookingDto", bookingDto);
-
-//        int totalCapacity = selectedRooms.stream().mapToInt(room -> room.getRoomTypeDto().getCapacity()).sum();
-//        int totalGuests = bookingDto.getAdultsCount() + bookingDto.getChildrenCount();
-//        if (totalCapacity < totalGuests) {
-//            model.addAttribute("error", "Выбранные комнаты не могут вместить указанное количество людей.");
-//            return "customer/accord";
-//        }
+        System.out.println(bookingDto);
+        return "customer/chooseRooms";
+    }
 
 
-        List<NutritionDto> nutritionDtoList = nutritionService.findAllNutrition();
-        model.addAttribute("nutritionDtoList", nutritionDtoList);
-//        NutritionDto nutritionDto = nutritionService.findNutritionById(selectedNutritionId);
-//        bookingDto.setNutritionDto(nutritionDto);
-//
-//        model.addAttribute("nutritionDto", nutritionDto);
-//        model.addAttribute("bookingDto", bookingDto);
+    @PostMapping("/bookings/chooseRooms")
+    public String chooseNutrition(@RequestParam List<Integer> selectedRoomIds,
+                                  @ModelAttribute BookingDto bookingDto,
+                                  Model model) {
+        System.out.println(bookingDto.getId());
 
-        List<AdditionalServiceDto> additionalServiceDtoList = additionalServiceService.findAllAdditionalServices();
-        model.addAttribute("additionalServiceDtoList", additionalServiceDtoList);
+        bookingDto.setRoomDtos(roomService.getRoomsByIds(selectedRoomIds));
+        bookingService.addSelectedRoomsToBooking(bookingDto, selectedRoomIds);
 
-//        List<AdditionalServiceDto> selectedAdditionalServices = additionalServiceService.findAllAdditionalServicesByIds(selectedAdditionalServiceIds);
-////        bookingDto.setAdditionalServiceDtos(selectedAdditionalServices);
-//        model.addAttribute("additionalServiceList", additionalServiceService.findAllAdditionalServices());
-//        model.addAttribute("bookingDto", bookingDto);
+        List<NutritionDto> nutritionList = nutritionService.findAllNutrition();
+        model.addAttribute("nutritionList", nutritionList);
+        model.addAttribute("bookingDto", bookingDto);
+        return "customer/chooseNutrition";
+    }
 
-        // текущий пользователь
-        UserDto currentUser = userDetailsService.getCurrentUser();
-        bookingDto.setUserDto(currentUser);
+    @PostMapping("/bookings/chooseNutrition")
+    public String chooseNutrition(@RequestParam Integer selectedNutritionId,
+                                  @ModelAttribute BookingDto bookingDto,
+                                  Model model) {
+        bookingDto.setNutritionDto(nutritionService.findNutritionById(selectedNutritionId));
 
-        // cохранить бронирование
-        bookingService.saveBooking(bookingDto);
+        bookingService.addSelectedNutritionToBooking(bookingDto, selectedNutritionId);
+        model.addAttribute("bookingDto", bookingDto);
+        System.out.println(bookingDto);
 
-        // сообщение об успешном бронировании
-        model.addAttribute("message", "Ваше бронирование успешно подтверждено!");
-        model.addAttribute("booking", bookingDto); // информация для страницы подтверждения бронирования
+        List<AdditionalServiceDto> additionalServiceList = additionalServiceService.findAllAdditionalServices();
+        model.addAttribute("additionalServiceList", additionalServiceList);
+        model.addAttribute("bookingDto", bookingDto);
+        return "customer/chooseServices";
+    }
 
-        return "customer/finalBooking";
+    @PostMapping("/bookings/chooseServices")
+    public String chooseServices(@RequestParam List<Integer> selectedAdditionalServiceIds,
+                                 @ModelAttribute BookingDto bookingDto,
+                                 RedirectAttributes redirectAttributes) {
+        bookingDto.setAdditionalServiceDtos(additionalServiceService.findAllAdditionalServicesByIds(selectedAdditionalServiceIds));
+        bookingService.addSelectedServicesToBooking(bookingDto, selectedAdditionalServiceIds);
+        redirectAttributes.addFlashAttribute("bookingDto", bookingDto);
+        return "redirect:/bookings/confirm/" + bookingDto.getId();
+    }
+
+    @GetMapping("/bookings/confirm/{id}")
+    public String showConfirmationPage(@PathVariable Integer id, Model model) {
+        BookingDto bookingDto = bookingService.findBookingById(id);
+        model.addAttribute("bookingDto", bookingDto);
+        return "customer/confirmationBooking";
+    }
+
+    @PostMapping("/bookings/confirm/{id}")
+    public String confirmBooking(@ModelAttribute BookingDto bookingDto, Model model) {
+        bookingService.confirmBooking(bookingDto);
+        model.addAttribute("message", "Your booking has been successfully confirmed!");
+        return "customer/successBooking";
+    }
+
+    @PostMapping("/bookings/cancel/{id}")
+    public String cancelBooking(@ModelAttribute BookingDto bookingDto, Model model) {
+        bookingService.cancelBooking(bookingDto);
+        model.addAttribute("message", "Your booking has been successfully canceled.");
+        return "home";                                                                                             //продумать куда перенаправить
+    }
+
+    @PreAuthorize("hasRole('CUSTOMER')")
+    @GetMapping("/bookings/{id}/delete")
+    public String deleteBooking(@PathVariable Integer id) {
+        bookingService.deleteBooking(id);
+        return "redirect:/home";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/bookings/{id}/adminDelete")
+    public String adminConfirmDeleteBooking(@PathVariable Integer id, Model model) {
+        BookingDto bookingDto = bookingService.findBookingById(id);
+        model.addAttribute("booking", bookingDto);
+        return "admin/confirmDeleteBooking";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/bookings/{id}/delete")
+    public String adminDeleteBooking(@PathVariable Integer id) {
+        bookingService.deleteBooking(id);
+        return "redirect:/bookings";
+    }
+
+    @GetMapping("/user/bookings")
+    public String viewUserBookings(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        List<BookingDto> userBookings = bookingService.getBookingsByUsername(username);
+        model.addAttribute("userBookings", userBookings);
+        return "customer/userBookings"; // Имя вашего шаблона
     }
 }
