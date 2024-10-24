@@ -34,10 +34,8 @@
                             </p>
                         </div>
                     </div>
-                    <div th:if="${#authentication.isAuthenticated() and #authentication.principal != null and #authentication.principal.authorities. ?[name == 'ROLE_ADMIN'].size() > 0}">
                         <a th:href="@{/additionalServices/{id}/edit(id=${additionalService.id})}" class="input-button">EDIT</a>
                         <a class="input-button" th:href="@{/additionalServices}">BACK TO ADDITIONAL SERVICES</a>
-                    </div>
                     <a class="input-button" th:href="@{/additionalServices}">BACK TO ADDITIONAL SERVICES</a>
                 </div>
             </div>

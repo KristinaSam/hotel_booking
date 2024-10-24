@@ -28,5 +28,5 @@ public interface BookingService {
 
     void cancelBooking(BookingDto bookingDto);
     List<BookingDto> getBookingsByUsername(String username);
-
+    BookingDto deleteBooking(Integer id);
 }
