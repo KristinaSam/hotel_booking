@@ -167,6 +167,7 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = bookingRepository.findById(bookingDto.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Booking not found with id: " + bookingDto.getId()));
         booking.setBookingStatus(BookingStatus.CONFIRMED);
+
         bookingRepository.save(booking);
     }
 

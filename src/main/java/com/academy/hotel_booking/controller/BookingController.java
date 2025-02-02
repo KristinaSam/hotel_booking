@@ -121,14 +121,14 @@ public class BookingController {
     public String confirmBooking(@ModelAttribute BookingDto bookingDto, Model model) {
         bookingService.confirmBooking(bookingDto);
         model.addAttribute("message", "Your booking has been successfully confirmed!");
-        return "customer/successBooking";
+        return "redirect:/user/bookings";
     }
 
     @PostMapping("/bookings/cancel/{id}")
     public String cancelBooking(@ModelAttribute BookingDto bookingDto, Model model) {
         bookingService.cancelBooking(bookingDto);
         model.addAttribute("message", "Your booking has been successfully canceled.");
-        return "home";                                                                                             //продумать куда перенаправить
+        return "redirect:/home";                                                                                             //продумать куда перенаправить
     }
 
     @PreAuthorize("hasRole('CUSTOMER')")
